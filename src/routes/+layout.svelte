@@ -1,0 +1,1 @@
+// Dito nilalagay ang ui elements na present sa lahat ng page. kunwari navigation bar, side bar, etc.

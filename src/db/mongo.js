@@ -17,5 +17,13 @@ export async function start_mongo() {
   }
 
 }
+export async function getEquipmentCollection() {
+    const db = client.db();
+    return db.collection('equipment');
+}
 
+export async function getUserCollection() {
+    const db = client.db();
+    return db.collection('users');
+}
 export default client.db()

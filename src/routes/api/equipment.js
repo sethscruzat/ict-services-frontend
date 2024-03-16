@@ -1,6 +1,5 @@
-import { start_mongo } from '$db/mongo';
-import {deleteEquipment} from '$db/equipmentFunc';
-import {createEquipment} from '$db/equipmentFunc';
+import { getEquipmentCollection } from '$db/mongo';
+import {deleteEquipment, createEquipment} from '$db/equipmentFunc';
 
 //create
 export async function post(request) {
@@ -10,10 +9,10 @@ export async function post(request) {
     const result = await createEquipment(equipmentID, issuedTo, condition, location, noOfUnits, remarks, status, usageRate);
     return {
       status: 201,
-      body: { message: 'Product created successfully', insertedId: result }
+      body: { message: 'Equipment added', insertedId: result }
     };
   } catch (error) {
-    console.error('Error creating product:', error);
+    console.error('Error creating equipment:', error);
     return {
       status: 500,
       body: { message: 'Internal server error' }
@@ -24,16 +23,14 @@ export async function post(request) {
 //read
 export async function get(request) {
   try {
-    const client = await start_mongo();
-    const db = client.db();
-    const equipment = db.collection('equipment');
+    const equipment = await getEquipmentCollection();
     const result = await equipment.find({}).toArray();
     return {
       status: 200,
       body: result
     };
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error('Error fetching equipment list:', error);
     return {
       status: 500,
       body: { message: 'Internal server error' }
@@ -46,23 +43,21 @@ export async function put(request) {
   const { id } = request.params;
 
   try {
-    const client = await connectToDatabase();
-    const db = client.db();
-    const equipment = db.collection('equipment');
+    const equipment = await getEquipmentCollection();
     const result = await equipment.updateOne({ equipmentID: id }, { $set: request.body });
     if (result.modifiedCount === 1) {
       return {
         status: 200,
-        body: { message: 'Product updated successfully' }
+        body: { message: 'Equipment updated successfully' }
       };
     } else {
       return {
         status: 404,
-        body: { message: 'Product not found' }
+        body: { message: 'Equipment not found' }
       };
     }
   } catch (error) {
-    console.error('Error updating product:', error);
+    console.error('Error updating Equipment:', error);
     return {
       status: 500,
       body: { message: 'Internal server error' }
@@ -79,16 +74,16 @@ export async function del(request) {
     if (result === 1) {
       return {
         status: 200,
-        body: { message: 'Product deleted successfully' }
+        body: { message: 'Equipment deleted successfully' }
       };
     } else {
       return {
         status: 404,
-        body: { message: 'Product not found' }
+        body: { message: 'Equipment not found' }
       };
     }
   } catch (error) {
-    console.error('Error deleting product:', error);
+    console.error('Error deleting equipment:', error);
     return {
       status: 500,
       body: { message: 'Internal server error' }

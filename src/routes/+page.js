@@ -1,0 +1,1 @@
+// Dito nilalagay mga functions para kunin ang data mula sa database. 

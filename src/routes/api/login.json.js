@@ -1,12 +1,10 @@
-import { start_mongo } from '$db/mongo';
+import { getUserCollection } from '$db/mongo';
 
 export async function post(request) {
   const { userID, password } = request.body;
 
   try {
-    const client = await start_mongo();
-    const db = client.db();
-    const users = db.collection('users');
+    const users = await getUserCollection();
 
     // Query the database to authenticate user
     const user = await users.findOne({ userID, password });
