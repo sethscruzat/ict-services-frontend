@@ -1,4 +1,43 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+  import { onMount } from 'svelte';
 
-// Ito ang default route ng ating app. kung baga ito ang page na makikita kapag ang route ay http://localhost:5173/
+  let Equipment = [];
+  onMount(async () => {
+		const response = await fetch('/api'); 
+    Equipment = await response.json()
+	});
+
+</script>
+
+<table>
+  <tr>
+    <th>Equipment ID</th>
+    <th>Issued To</th>
+    <th>Condition</th>
+    <th>Location</th>
+    <th>Number of Units</th>
+    <th>Remarks</th>
+    <th>Status</th>
+    <th>Usage Rate</th>
+  </tr>
+  {#each Equipment as equipment}
+    <tr>
+      <td>{equipment.equipmentID}</td>
+      <td>{equipment.issuedTo}</td>
+      <td>{equipment.condition}</td>
+      <td>{equipment.location}</td>
+      <td>{equipment.noOfUnits}</td>
+      <td>{equipment.remarks}</td>
+      <td>{equipment.status}</td>
+      <td>{equipment.usageRate}</td>
+    </tr>
+  {/each}
+</table>
+
+<style>
+  tr,td,th {
+    border: 1px solid black;
+    margin: 10rem;
+    text-align: center;
+  }
+</style>

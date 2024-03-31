@@ -1,16 +1,16 @@
-import { getEquipmentCollection } from '$db/mongo';
-import {deleteEquipment, createEquipment} from '$db/equipmentFunc';
+import { getEquipmentCollection } from './src/db/mongo.js';
+import {deleteEquipment, createEquipment} from './src/db/equipmentFunc.js';
 
-//create
-export async function post(request) {
-  const { equipmentID, issuedTo, condition, location, noOfUnits, remarks, status, usageRate } = request.body;
+import { json } from '@sveltejs/kit';
+
+//create - done
+export async function POST(requestEvent) {
+  const { request } = requestEvent;
+  const { equipmentID, issuedTo, condition, location, noOfUnits, remarks, status, usageRate } = request;
 
   try {
     const result = await createEquipment(equipmentID, issuedTo, condition, location, noOfUnits, remarks, status, usageRate);
-    return {
-      status: 201,
-      body: { message: 'Equipment added', insertedId: result }
-    };
+    return json(result, {status: 201, message: 'Equipment added'})
   } catch (error) {
     console.error('Error creating equipment:', error);
     return {
@@ -21,14 +21,17 @@ export async function post(request) {
 }
 
 //read
-export async function get(request) {
+// export async function GET(request) {
+export async function GET() {
   try {
     const equipment = await getEquipmentCollection();
+    // const result = await equipment.find({location:"CICS BUILDING"}).toArray();
     const result = await equipment.find({}).toArray();
-    return {
-      status: 200,
-      body: result
-    };
+    return json(result);
+    // return {
+    //   status: 200,
+    //   body: result
+    // };
   } catch (error) {
     console.error('Error fetching equipment list:', error);
     return {
@@ -39,7 +42,7 @@ export async function get(request) {
 }
 
 //update
-export async function put(request) {
+export async function PUT(request) {
   const { id } = request.params;
 
   try {
@@ -66,7 +69,7 @@ export async function put(request) {
 }
 
 //delete
-export async function del(request) {
+export async function DELETE(request) {
   const { id } = request.params;
 
   try {
