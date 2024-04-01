@@ -1,5 +1,5 @@
 import { getEquipmentCollection } from './src/db/mongo.js';
-import {deleteEquipment, createEquipment} from './src/db/equipmentFunc.js';
+import { deleteEquipment, createEquipment } from './src/db/equipmentFunc.js';
 
 import { json } from '@sveltejs/kit';
 
